@@ -1,2 +1,6 @@
-# find-a-pair
-Puzzle "find a pair"
+# Puzzle "find a pair"
+
+
+Local:
+- run: npm start
+

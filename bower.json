@@ -1,0 +1,11 @@
+{
+    "name": "find-a-pair",
+    "description": "Puzzle 'Find a pair'",
+    "homepage": "https://github.com/nikkoUA/find-a-pair",
+    "private": true,
+    "dependencies": {
+        "angular": "1.4.x",
+        "angular-mocks": "1.4.x",
+        "less": "2.5.x"
+    }
+}
