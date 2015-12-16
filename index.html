@@ -16,6 +16,7 @@
 <body data-ng-app="findPairApp">
     <h1>Simple game "Find a Pair"</h1>
     <div id="findPair" data-ng-controller="findPairCtrl">
+        left <span>{{timeLeft}}</span>
         <button data-ng-click="startGame()">Start game</button>
         <div class="cards">
             <div data-ng-repeat="card in cards track by $index"

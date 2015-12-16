@@ -3,7 +3,6 @@
  * Email: khilkovn@gmail.com
  * Github: https://github.com/nikkoUA
  *
- * @todo: Add Timer
  * @todo: Add messages "GAME OVER", "YOU WIN", "YOU LOSE"
  * @todo: Add best result saving and showing
  * @todo: Add game pause
@@ -26,20 +25,32 @@ var findPairApp = angular.module('findPairApp', []);
 findPairApp.constant('cardsList', ['A', 'B', 'C', 'D', 'E', 'I', 'F', 'G', 'H']);
 
 /**
+ * Default game time in seconds
+ *
+ * @type Number
+ */
+findPairApp.constant('gameTime', 10);
+
+/**
  * Opened card
  *
  * @type Object
  */
-findPairApp.value('cardOpened', {});
+findPairApp.value('game', {
+    cardOpened: {},
+    cardLeft: 0,
+    gameRun: false,
+    timeLeft: 0
+});
 
 /**
  * Service for work with cards
  *
- * @param  {Array} - value.cards
- * @type Object
+ * @param cardsList {Array} - constant.cardsList
+ * @param card {Object} - value.card
  * @return Object
  */
-findPairApp.service('cards', ['cardsList', 'cardOpened', function (cardsList, cardOpened) {
+findPairApp.service('cards', ['cardsList', 'game', function (cardsList, game) {
     return {
         /**
          * Function create cards for game
@@ -65,34 +76,93 @@ findPairApp.service('cards', ['cardsList', 'cardOpened', function (cardsList, ca
         /**
          * Event listener of card click. Show card content, check for previous card, hide cards
          *
-         * @param card {Object} - clicked card object
+         * @param cardClicked {Object} - clicked card object
          */
-        cardClick: function(card){
-            if (card.className === 'open' || card.className === 'hide'){
+        cardClick: function(cardClicked){
+            if (cardClicked.className === 'open' || cardClicked.className === 'hide'){
                 return false;
             }
-            card.className = 'open';
-            if (cardOpened.value && cardOpened.value == card.value){
-                card.className = 'hide';
-                cardOpened.className = 'hide';
+            cardClicked.className = 'open';
+            if (game.cardOpened.value && game.cardOpened.value == cardClicked.value){
+                cardClicked.className = 'hide';
+                game.cardOpened.className = 'hide';
             }
             else {
-                cardOpened.className = '';
-                cardOpened = card;
+                game.cardOpened.className = '';
+                game.cardOpened = cardClicked;
             }
         }
     };
 }]);
 
 /**
+ * Service Timer
+ *
+ * @return Object
+ */
+findPairApp.service('timer', ['$rootScope', 'game', function ($rootScope, game) {
+    return {
+        /**
+         * Function start game timer
+         */
+        start: function(){
+            var that = this;
+            setTimeout(function(){
+                game.timeLeft--;
+                $rootScope.$digest();
+                //scope.timeLeft--;
+                if (game.gameRun){
+                    if (game.timeLeft > 0){
+                        that.start();
+                    }
+                    else {
+                        that.stop();
+                    }
+                }
+            }, 1000);
+        },
+
+        /**
+         * Function pause game timer
+         */
+        pause: function(){
+        },
+
+        /**
+         * Function stop game timer
+         */
+        stop: function(){
+        }
+    };
+}]);
+
+
+/**
  * Main app controller
  *
  * @param $scope
  * @param cards {Function} - service.cards
+ * @param gameTime {Function} - service.gameTime
  */
-findPairApp.controller('findPairCtrl', ['$scope', 'cards', function ($scope, cards) {
+findPairApp.controller('findPairCtrl', ['$scope', 'cardsList', 'gameTime', 'game', 'cards', 'timer', function ($scope, cardsList, gameTime, game, cards, timer) {
     $scope.startGame = function(){
         $scope.cards = cards.list();
+        game.cardLeft = cardsList.length;
+        game.gameRun = true;
+        game.timeLeft = gameTime;
+        $scope.timeLeft = game.timeLeft;
+        timer.start();
     };
+    $scope.$watch(function(){
+        return game.timeLeft;
+    }, function(a, b){
+        if (a != b){
+            $scope.timeLeft = game.timeLeft;
+            if (!$scope.timeLeft){
+                $scope.cards = [];
+                game.gameRun = false;
+            }
+        }
+    });
     $scope.check = cards.cardClick;
 }]);
