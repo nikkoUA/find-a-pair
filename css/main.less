@@ -2,4 +2,160 @@
     Autor Nikolai Khilkovsky
     Email: khilkovn@gmail.com
     Github: https://github.com/nikkoUA
+
+    @TODO: add animation
 */
+
+@font-face {
+  font-family: 'Glyphicons Halflings';
+  src: url('../fonts/glyphicons-halflings-regular.eot');
+  src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/glyphicons-halflings-regular.woff2') format('woff2'),
+    url('../fonts/glyphicons-halflings-regular.woff') format('woff'),
+    url('../fonts/glyphicons-halflings-regular.ttf') format('truetype'),
+    url('../fonts/glyphicons-halflings-regular.svg#@glyphicons_halflingsregular') format('svg');
+}
+
+
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: #008000;
+  color: #fff;
+  font-size: 10px;
+}
+
+#layout {
+  max-width: 72em;
+  min-width: 36em;
+  margin: 0 auto;
+  padding: 1.5em;
+  &.game-run {
+    #game {
+      display: block;
+    }
+  }
+}
+h1 {
+  text-align: center;
+}
+#game {
+  display: none;
+  .controlls {
+    text-align: center;
+    &:after {
+      content: '';
+      display: table;
+      width: 100%;
+    }
+    time {
+      float: right;
+      font-size: 2em;
+      width: 3.5em;
+      height: 2.5em;
+      line-height: 2.5em;
+      text-align: right;
+    }
+    button {
+      font-size: 2em;
+      margin: 0 0.5em;
+      width: 8em;
+      height: 2.5em;
+      &:first-of-type {
+        float: left;
+        margin: 0;
+        font-family: 'Glyphicons Halflings', serif;
+        text-indent: -99999em;
+        position: relative;
+        width: 3.5em;
+        &:before {
+          content: "\e073";
+          position: absolute;
+          width: 100%;
+          display: block;
+          text-align: center;
+          left: 0;
+          text-indent: 0;
+        }
+        &.in-pause {
+          &:before {
+            content: "\e072";
+          }
+        }
+        &.ng-hide {
+          display: block !important;
+          visibility: hidden;
+        }
+      }
+    }
+  }
+  .cards {
+    text-align: center;
+    margin: 1.5em 0;
+    padding: 2em;
+    & > div {
+      font: normal 3em/3.5em 'Glyphicons Halflings', serif;
+      display: inline-block;
+      vertical-align: top;
+      width: 2.3em;
+      height: 3.5em;
+      text-align: center;
+      margin: 0.4em;
+      border-radius: 0.1em;
+      cursor: default;
+      background: #fff;
+      span {
+        display: none;
+      }
+      &.open,
+      &.found {
+         color: #000;
+        span {
+          display: block;
+        }
+      }
+      &.found {
+        opacity: 0.75;
+      }
+    }
+  }
+  .deck {
+    position: relative;
+  }
+  .message {
+    text-align: center;
+    h2 {
+      font-size: 6em;
+    }
+    h3 {
+      font-size: 3em;
+    }
+    &.pause {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0;
+      color: #5E740B;
+      background: rgba(255, 255, 255, 0.7);
+      h2 {
+        line-height: 1.5em;
+        position: absolute;
+        left: 0;
+        top: 50%;
+        width: 100%;
+        margin-top: -0.75em;
+      }
+    }
+    &.lose {
+      color: #0d3349;
+    }
+  }
+}
