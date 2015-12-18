@@ -27,7 +27,14 @@
                 <div class="cards">
                     <div data-ng-repeat="card in cards track by $index"
                          data-ng-click="check(card)"
-                         data-ng-class="card.className"><span>{{card.value}}</span></div>
+                         data-ng-class="card.className">
+                        <div class="flipper">
+                            <div class="face">
+                                <span>{{card.value}}</span>
+                            </div>
+                            <div class="flip"></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="message win" data-ng-show="game.result">
                     <h2>You WIN!</h2>

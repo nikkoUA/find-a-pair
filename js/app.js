@@ -114,7 +114,7 @@ findPairApp.service('cards', ['$rootScope', 'game', 'gameProcess', function ($ro
          * @param cardClicked {Object} - clicked card object
          */
         cardClick: function(cardClicked){
-            if (cardClicked.className === 'open' || cardClicked.className === 'hide' || game.gamePause){
+            if (cardClicked.className === 'open' || cardClicked.className === 'found' || game.gamePause){
                 return false;
             }
             cardClicked.className = 'open';
