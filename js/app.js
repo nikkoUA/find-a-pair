@@ -3,7 +3,7 @@
  * Email: khilkovn@gmail.com
  * Github: https://github.com/nikkoUA
  *
- * @todo: Add best result saving and showing
+ * @todo: Add best result saving
  */
 
 "use strict";
@@ -47,19 +47,19 @@ findPairApp.value('game', {
 /**
  * Directive game-timer. Format and show timer
  */
-findPairApp.directive('gameTimer', function(){
-    return function(scope, element, attrs){
+findPairApp.directive('gameTimer', function (){
+    return function (scope, element, attrs){
         /**
          * Function Update timer view
          *
          * @param value {Number} - timer value
          */
-        function updateTimer(value) {
+        function updateTimer(value){
             var time2show, min, sec;
-            if(!value){
+            if (!value){
                 time2show = '00:00';
             }
-            else{
+            else {
                 min = Math.floor(value / 60);
                 sec = value - min * 60;
                 min = min.toString();
@@ -70,7 +70,7 @@ findPairApp.directive('gameTimer', function(){
             element.text(time2show);
         }
 
-        scope.$watch(attrs.gameTimer, function(value) {
+        scope.$watch(attrs.gameTimer, function (value){
             updateTimer(value);
         });
     }
@@ -84,7 +84,7 @@ findPairApp.directive('gameTimer', function(){
  * @param gameProcess {Object} - service.gameProcess
  * @return Object
  */
-findPairApp.service('cards', ['$rootScope', 'game', 'gameProcess', function ($rootScope, game, gameProcess) {
+findPairApp.service('cards', ['$window', '$rootScope', 'game', 'gameProcess', function ($window, $rootScope, game, gameProcess){
     return {
         /**
          * Function create cards for game
@@ -92,11 +92,11 @@ findPairApp.service('cards', ['$rootScope', 'game', 'gameProcess', function ($ro
          * @param cardsList {Array}
          * @returns {Array}
          */
-        list: function(cardsList){
+        list: function (cardsList){
             var result = [],
                 cardsForGame = cardsList.concat(cardsList);
 
-            cardsForGame.sort(function(){
+            cardsForGame.sort(function (){
                 return Math.random() - 0.5;
             });
             for (var i = 0; i < cardsForGame.length; i++){
@@ -113,7 +113,7 @@ findPairApp.service('cards', ['$rootScope', 'game', 'gameProcess', function ($ro
          *
          * @param cardClicked {Object} - clicked card object
          */
-        cardClick: function(cardClicked){
+        cardClick: function (cardClicked){
             if (cardClicked.className === 'open' || cardClicked.className === 'found' || game.gamePause){
                 return false;
             }
@@ -123,7 +123,8 @@ findPairApp.service('cards', ['$rootScope', 'game', 'gameProcess', function ($ro
                 game.cardOpened.className = 'found';
                 game.cardLeft--;
                 game.cardOpened = {};
-                if(!game.cardLeft){
+                if (!game.cardLeft){
+                    $window.clearTimeout(game.timer);
                     gameProcess.win();
                 }
             }
@@ -144,20 +145,20 @@ findPairApp.service('cards', ['$rootScope', 'game', 'gameProcess', function ($ro
  * @param gameProcess {Object} - service.gameProcess
  * @return Object
  */
-findPairApp.service('timer', ['$window', '$rootScope', 'game', 'gameProcess', function ($window, $rootScope, game, gameProcess) {
+findPairApp.service('timer', ['$window', '$rootScope', 'game', 'gameProcess', function ($window, $rootScope, game, gameProcess){
     return {
         /**
          * Function start game timer
          */
-        start: function(){
+        start: function (){
             var self = this;
-            $window.setTimeout(function(){
+            game.timer = $window.setTimeout(function (){
                 if (game.gameRun){
                     game.timeLeft--;
                     if (game.timeLeft > 0 && !game.gamePause){
                         self.start();
                     }
-                    else if(game.timeLeft <= 0) {
+                    else if (game.timeLeft <= 0){
                         self.stop();
                         gameProcess.lose();
                     }
@@ -171,10 +172,13 @@ findPairApp.service('timer', ['$window', '$rootScope', 'game', 'gameProcess', fu
          *
          * return {string} - class name for pause button
          */
-        pause: function(){
+        pause: function (){
             var self = this;
             game.gamePause = !game.gamePause;
-            if(!game.gamePause){
+            if (game.gamePause){
+                $window.clearTimeout(game.timer);
+            }
+            else {
                 self.start();
             }
             return game.gamePause ? 'in-pause' : null;
@@ -183,7 +187,7 @@ findPairApp.service('timer', ['$window', '$rootScope', 'game', 'gameProcess', fu
         /**
          * Function stop game timer
          */
-        stop: function(){
+        stop: function (){
             game.gameRun = false;
             game.gamePause = false;
         }
@@ -196,13 +200,20 @@ findPairApp.service('timer', ['$window', '$rootScope', 'game', 'gameProcess', fu
  * @param gameTime {Number} - constant.gameTime
  * @param game {object} - value.game
  */
-findPairApp.service('gameProcess', ['gameTime', 'game', function(gameTime, game){
+findPairApp.service('gameProcess', ['gameTime', 'game', function (gameTime, game){
     return {
-        win: function(){
+        /**
+         * Function do procedures of win
+         */
+        win: function (){
             game.result = gameTime - game.timeLeft;
             game.gameRun = false;
         },
-        lose: function(){
+
+        /**
+         * Function do procedures of lose
+         */
+        lose: function (){
             game.lose = true;
         }
     };
@@ -218,35 +229,34 @@ findPairApp.service('gameProcess', ['gameTime', 'game', function(gameTime, game)
  * @param cards {Function} - service.cards
  * @param timer {Function} - service.timer
  */
-findPairApp.controller('findPairCtrl', ['$scope', 'cardsList', 'gameTime', 'game', 'cards', 'timer', function ($scope, cardsList, gameTime, game, cards, timer) {
-    $scope.game = game;
+findPairApp.controller('findPairCtrl', ['$scope', 'cardsList', 'gameTime', 'game', 'cards', 'timer', function ($scope, cardsList, gameTime, game, cards, timer){
     game.timeLeft = gameTime;
+    $scope.game = game;
 
-    $scope.startGame = function(){
+    $scope.startGame = function (){
         game.gameRun = true;
         game.cardLeft = cardsList.length;
         game.timeLeft = gameTime;
         game.result = null;
         game.lose = null;
         $scope.cards = cards.list(cardsList);
-        $scope.timeLeft = game.timeLeft;
         $scope.hideStartBtn = true;
         $scope.inPause = null;
         timer.start();
     };
-    $scope.pauseGame = function(){
+    $scope.pauseGame = function (){
         $scope.inPause = timer.pause();
     };
-    $scope.stopGame = function(){
+    $scope.stopGame = function (){
         timer.stop();
     };
 
     $scope.check = cards.cardClick;
 
-    $scope.$watch(function(){
+    $scope.$watch(function (){
         return game.gameRun;
-    }, function(newVal){
-        if(!newVal){
+    }, function (newVal){
+        if (!newVal){
             $scope.hideStartBtn = false;
             $scope.cards = [];
             if (game.timeLeft && game.result === null){
@@ -254,5 +264,6 @@ findPairApp.controller('findPairCtrl', ['$scope', 'cardsList', 'gameTime', 'game
             }
         }
     });
+
     $scope.activeClassName = 'game-run';
 }]);

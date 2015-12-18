@@ -4,225 +4,231 @@
     Github: https://github.com/nikkoUA
 */
 
-
 @font-face {
-  font-family: 'Glyphicons Halflings';
-  src: url('../fonts/glyphicons-halflings-regular.eot');
-  src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'),
+    font-family: 'Glyphicons Halflings';
+    src: url('../fonts/glyphicons-halflings-regular.eot');
+    src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'),
     url('../fonts/glyphicons-halflings-regular.woff2') format('woff2'),
     url('../fonts/glyphicons-halflings-regular.woff') format('woff'),
     url('../fonts/glyphicons-halflings-regular.ttf') format('truetype'),
     url('../fonts/glyphicons-halflings-regular.svg#@glyphicons_halflingsregular') format('svg');
 }
 
-
 * {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  outline: 0 none;
-  -moz-user-select: none;
-  user-select: none;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    outline: 0 none;
+    -moz-user-select: none;
+    user-select: none;
 }
 
 html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  background: #008000;
-  color: #fff;
-  font-size: 10px;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: #008000;
+    color: #fff;
+    font-size: 10px;
 }
 
 #layout {
-  max-width: 72em;
-  min-width: 36em;
-  margin: 0 auto;
-  padding: 1.5em;
-  &.game-run {
-    #game {
-      display: block;
+    max-width: 72em;
+    min-width: 36em;
+    margin: 0 auto;
+    padding: 1.5em;
+    &.game-run {
+        #game {
+            display: block;
+        }
     }
-  }
 }
+
 h1 {
-  text-align: center;
+    text-align: center;
 }
+
 #game {
-  display: none;
-  .controlls {
-    text-align: center;
-    &:after {
-      content: '';
-      display: table;
-      width: 100%;
+    display: none;
+    .controlls {
+        text-align: center;
+        &:after {
+            content: '';
+            display: table;
+            width: 100%;
+        }
+        time {
+            float: right;
+            font-size: 2em;
+            width: 3.5em;
+            height: 2.5em;
+            line-height: 2.5em;
+            text-align: right;
+        }
+        button {
+            font-size: 2em;
+            margin: 0 0.5em;
+            width: 8em;
+            height: 2.5em;
+            display: inline-block;
+            &:first-of-type {
+                float: left;
+                margin: 0;
+                font-family: 'Glyphicons Halflings', serif;
+                text-indent: -99999em;
+                position: relative;
+                width: 3.5em;
+                display: block !important;
+                &:before {
+                    content: "\e073";
+                    position: absolute;
+                    width: 100%;
+                    display: inline-block;
+                    text-align: center;
+                    left: 0;
+                    text-indent: 0;
+                }
+                &.in-pause {
+                    &:before {
+                        content: "\e072";
+                    }
+                }
+                &.ng-hide {
+                    visibility: hidden;
+                }
+            }
+        }
     }
-    time {
-      float: right;
-      font-size: 2em;
-      width: 3.5em;
-      height: 2.5em;
-      line-height: 2.5em;
-      text-align: right;
+    .cards {
+        text-align: center;
+        margin: 1.5em 0;
+        padding: 2em;
+        & > div {
+            -webkit-perspective: 5em;
+            perspective: 5em;
+            width: 2.3em;
+            height: 3.5em;
+            cursor: default;
+            font: normal 3em/3.5em 'Glyphicons Halflings', serif;
+            display: inline-block;
+            vertical-align: top;
+            text-align: center;
+            margin: 0.4em;
+            .flipper {
+                -webkit-transition: 0.6s;
+                transition: 0.6s;
+                -webkit-transform-style: preserve-3d;
+                transform-style: preserve-3d;
+                position: relative;
+            }
+            .face {
+                -webkit-transform: rotateY(180deg);
+                transform: rotateY(180deg);
+            }
+            .flip {
+                background: -moz-linear-gradient(45deg, rgba(0, 0, 0, 0) 48%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0) 52%), linear-gradient(-45deg, rgba(0, 0, 0, 0) 48%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0) 52%);
+                background: -webkit-linear-gradient(45deg, rgba(0, 0, 0, 0) 48%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0) 52%), linear-gradient(-45deg, rgba(0, 0, 0, 0) 48%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0) 52%);
+                background: linear-gradient(45deg, rgba(0, 0, 0, 0) 48%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0) 52%), linear-gradient(-45deg, rgba(0, 0, 0, 0) 48%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0) 52%);
+                background-size: 0.5em 0.5em;
+                background-repeat: repeat;
+            }
+            .flip,
+            .face {
+                width: 2.3em;
+                height: 3.5em;
+                -webkit-backface-visibility: hidden;
+                backface-visibility: hidden;
+                position: absolute;
+                left: 0;
+                top: 0;
+                border-radius: 0.1em;
+                background-color: #fff;
+                color: #000;
+            }
+            &.open,
+            &.found {
+                .flipper {
+                    -webkit-transform: rotateY(180deg);
+                    transform: rotateY(180deg);
+                }
+            }
+            &.found {
+                opacity: 0.75;
+            }
+        }
     }
-    button {
-      font-size: 2em;
-      margin: 0 0.5em;
-      width: 8em;
-      height: 2.5em;
-      &:first-of-type {
-        float: left;
-        margin: 0;
-        font-family: 'Glyphicons Halflings', serif;
-        text-indent: -99999em;
+    .deck {
         position: relative;
-        width: 3.5em;
-        &:before {
-          content: "\e073";
-          position: absolute;
-          width: 100%;
-          display: block;
-          text-align: center;
-          left: 0;
-          text-indent: 0;
+    }
+    .message {
+        text-align: center;
+        h2 {
+            font-size: 6em;
         }
-        &.in-pause {
-          &:before {
-            content: "\e072";
-          }
+        h3 {
+            font-size: 3em;
         }
-        &.ng-hide {
-          display: block !important;
-          visibility: hidden;
+        &.pause {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+            color: #5E740B;
+            background: rgba(255, 255, 255, 0.7);
+            h2 {
+                line-height: 1.5em;
+                position: absolute;
+                left: 0;
+                top: 50%;
+                width: 100%;
+                margin-top: -0.75em;
+            }
         }
-      }
-    }
-  }
-  .cards {
-    text-align: center;
-    margin: 1.5em 0;
-    padding: 2em;
-    & > div {
-      -webkit-perspective: 5em;
-      perspective: 5em;
-      width: 2.3em;
-      height: 3.5em;
-      cursor: default;
-      font: normal 3em/3.5em 'Glyphicons Halflings', serif;
-      display: inline-block;
-      vertical-align: top;
-      text-align: center;
-      margin: 0.4em;
-      .flipper {
-        -webkit-transition: 0.6s;
-        transition: 0.6s;
-        -webkit-transform-style: preserve-3d;
-        transform-style: preserve-3d;
-        position: relative;
-      }
-      .face {
-        -webkit-transform: rotateY(180deg);
-        transform: rotateY(180deg);
-      }
-      .flip {
-        background: -moz-linear-gradient(45deg, rgba(0, 0, 0, 0) 48%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0) 52%), linear-gradient(-45deg,rgba(0, 0, 0, 0) 48%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0) 52%);
-        background: -webkit-linear-gradient(45deg, rgba(0, 0, 0, 0) 48%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0) 52%), linear-gradient(-45deg,rgba(0, 0, 0, 0) 48%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0) 52%);
-        background: linear-gradient(45deg, rgba(0, 0, 0, 0) 48%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0) 52%), linear-gradient(-45deg,rgba(0, 0, 0, 0) 48%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0) 52%);
-        background-size: 0.5em 0.5em;
-        background-repeat: repeat;
-      }
-      .flip,
-      .face {
-        width: 2.3em;
-        height: 3.5em;
-        -webkit-backface-visibility: hidden;
-        backface-visibility: hidden;
-        position: absolute;
-        left: 0;
-        top: 0;
-        border-radius: 0.1em;
-        background-color: #fff;
-        color: #000;
-      }
-      &.open,
-      &.found {
-        .flipper {
-          -webkit-transform: rotateY(180deg);
-          transform: rotateY(180deg);
+        &.lose {
+            color: #0d3349;
         }
-      }
-      &.found {
-        opacity: 0.75;
-      }
     }
-  }
-  .deck {
-    position: relative;
-  }
-  .message {
-    text-align: center;
-    h2 {
-      font-size: 6em;
-    }
-    h3 {
-      font-size: 3em;
-    }
-    &.pause {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      left: 0;
-      top: 0;
-      color: #5E740B;
-      background: rgba(255, 255, 255, 0.7);
-      h2 {
-        line-height: 1.5em;
-        position: absolute;
-        left: 0;
-        top: 50%;
-        width: 100%;
-        margin-top: -0.75em;
-      }
-    }
-    &.lose {
-      color: #0d3349;
-    }
-  }
 }
 
 @media (max-width: 700px) {
-  #layout {
-    max-width: 54em;
-  }
-  #game {
-    .cards {
-      & > div {
-        font-size: 2.5em;
-      }
+    #layout {
+        max-width: 54em;
     }
-  }
+
+    #game {
+        .cards {
+            & > div {
+                font-size: 2.5em;
+            }
+        }
+    }
 }
+
 @media (max-width: 560px) {
-  #layout {
-    max-width: 47em;
-  }
-  #game {
-    .cards {
-      & > div {
-        font-size: 2.1em;
-      }
+    #layout {
+        max-width: 47em;
     }
-  }
+
+    #game {
+        .cards {
+            & > div {
+                font-size: 2.1em;
+            }
+        }
+    }
 }
+
 @media (max-width: 480px) {
-  #layout {
-    max-width: 36em;
-  }
-  #game {
-    .cards {
-      & > div {
-        font-size: 1.5em;
-      }
+    #layout {
+        max-width: 36em;
     }
-  }
+
+    #game {
+        .cards {
+            & > div {
+                font-size: 1.5em;
+            }
+        }
+    }
 }

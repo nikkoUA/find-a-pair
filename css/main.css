@@ -61,6 +61,7 @@ h1 {
   margin: 0 0.5em;
   width: 8em;
   height: 2.5em;
+  display: inline-block;
 }
 #game .controlls button:first-of-type {
   float: left;
@@ -69,12 +70,13 @@ h1 {
   text-indent: -99999em;
   position: relative;
   width: 3.5em;
+  display: block !important;
 }
 #game .controlls button:first-of-type:before {
   content: "\e073";
   position: absolute;
   width: 100%;
-  display: block;
+  display: inline-block;
   text-align: center;
   left: 0;
   text-indent: 0;
@@ -83,7 +85,6 @@ h1 {
   content: "\e072";
 }
 #game .controlls button:first-of-type.ng-hide {
-  display: block !important;
   visibility: hidden;
 }
 #game .cards {
